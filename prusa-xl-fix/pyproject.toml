@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "OctoPrint-PrusaXLToolFix"
+version = "1.0.0"
+description = "Explicit tool context for Prusa XL Buddy M106/M107/M201/M203/M221 commands"
+requires-python = ">=3.9,<4"
+license = {text = "MIT"}
+dependencies = ["OctoPrint>=1.10,<2"]
+classifiers = ["Framework :: OctoPrint", "Programming Language :: Python :: 3"]
+
+[project.entry-points."octoprint.plugin"]
+prusaxltoolfix = "octoprint_prusaxltoolfix"
+
+[tool.setuptools.packages.find]
+include = ["octoprint_prusaxltoolfix*"]
+
+[tool.setuptools.package-data]
+octoprint_prusaxltoolfix = ["templates/*.jinja2", "static/js/*.js"]

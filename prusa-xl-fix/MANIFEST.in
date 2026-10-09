@@ -1,0 +1,4 @@
+include LICENSE
+recursive-include tests *.py
+recursive-include octoprint_prusaxltoolfix/templates *.jinja2
+recursive-include octoprint_prusaxltoolfix/static *.js

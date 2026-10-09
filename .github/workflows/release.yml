@@ -1,0 +1,57 @@
+name: Build and release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run tests
+        working-directory: prusa-xl-fix
+        run: python -B -m unittest discover -s tests -v
+
+      # OctoPrint's Software Update only offers an update when the release
+      # version is higher than the installed one, so every build gets a
+      # unique, increasing ".postN" version based on the workflow run number.
+      - name: Build tarball
+        id: build
+        run: |
+          base=$(sed -n 's/^version = "\([^"]*\)".*/\1/p' prusa-xl-fix/pyproject.toml)
+          version="$base.post$GITHUB_RUN_NUMBER"
+          sed -i "s/^version = \".*\"/version = \"$version\"/" prusa-xl-fix/pyproject.toml
+          sh create_tarball.sh
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "archive=octoprint_prusaxltoolfix-$version.tar.gz" >> "$GITHUB_OUTPUT"
+          echo "tag=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.build.outputs.tag }}
+          ARCHIVE: ${{ steps.build.outputs.archive }}
+          VERSION: ${{ steps.build.outputs.version }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists; skipping."
+            exit 0
+          fi
+          gh release create "$TAG" "$ARCHIVE" \
+            --target "$GITHUB_SHA" \
+            --title "Prusa XL/XL+ fix $VERSION" \
+            --generate-notes

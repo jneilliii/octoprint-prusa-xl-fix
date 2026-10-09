@@ -1,0 +1,40 @@
+<form class="form-horizontal" id="prusaxltoolfix_settings_form">
+    <p>Workaround to support Prusa XL/XL+ 6.10.x firmware and later.</p>
+
+    <div class="control-group">
+        <label class="control-label">Printers</label>
+        <div class="controls">
+            <script type="application/json" id="prusaxltoolfix_profiles_json">{{ plugin_prusaxltoolfix_profiles_json|safe }}</script>
+            <table class="table table-bordered table-condensed table-striped">
+                <thead>
+                    <tr>
+                        <th>Printer profile</th>
+                        <th style="width: 80px; text-align: center;">Apply</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: printerList">
+                    <tr>
+                        <td><label data-bind="text: name, attr: {for: 'prusaxltoolfix_printer_' + id}" style="margin: 0;"></label></td>
+                        <td style="text-align: center;">
+                            <input type="checkbox" style="margin: 0;" data-bind="checked: enabled, attr: {value: id, id: 'prusaxltoolfix_printer_' + id}">
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody data-bind="visible: !printerList().length">
+                    <tr>
+                        <td colspan="2" class="muted" data-bind="text: loadError() || 'No printer profiles are available.'"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="prusaxltoolfix_tool">Tool index</label>
+        <div class="controls">
+            <input id="prusaxltoolfix_tool" type="number" min="0" max="4" step="1" class="input-mini"
+                   data-bind="value: settings.plugins.prusaxltoolfix.tool_index">
+            <p class="help-block">Default: 0. Choose an installed tool (0–4). This should never need to be changed from T0 but it's here just in case.</p>
+        </div>
+    </div>
+</form>
