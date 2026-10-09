@@ -28,12 +28,12 @@ jobs:
 
       # OctoPrint's Software Update only offers an update when the release
       # version is higher than the installed one, so every build gets a
-      # unique, increasing ".postN" version based on the workflow run number.
+      # unique, increasing version by appending the workflow run number.
       - name: Build tarball
         id: build
         run: |
           base=$(sed -n 's/^version = "\([^"]*\)".*/\1/p' prusa-xl-fix/pyproject.toml)
-          version="$base.post$GITHUB_RUN_NUMBER"
+          version="$base.$GITHUB_RUN_NUMBER"
           sed -i "s/^version = \".*\"/version = \"$version\"/" prusa-xl-fix/pyproject.toml
           sh create_tarball.sh
           echo "version=$version" >> "$GITHUB_OUTPUT"

@@ -198,7 +198,7 @@ class HookTests(unittest.TestCase):
                 self.p.on_settings_save(data)
 
     def test_update_information(self):
-        self.p._plugin_version = '1.0.0.post7'
+        self.p._plugin_version = '1.0.0.7'
         self.assertEqual(
             plugin.__plugin_hooks__['octoprint.plugin.softwareupdate.check_config'],
             self.p.get_update_information,
@@ -206,11 +206,11 @@ class HookTests(unittest.TestCase):
         info = self.p.get_update_information()['prusaxltoolfix']
         self.assertEqual(info['type'], 'github_release')
         self.assertEqual((info['user'], info['repo']), ('anuzellig', 'octoprint-prusa-xl-fix'))
-        self.assertEqual(info['current'], '1.0.0.post7')
+        self.assertEqual(info['current'], '1.0.0.7')
         self.assertEqual(
-            info['pip'].format(target_version='1.0.0.post8'),
+            info['pip'].format(target_version='1.0.0.8'),
             'https://github.com/anuzellig/octoprint-prusa-xl-fix/releases/download/'
-            '1.0.0.post8/octoprint_prusaxltoolfix-1.0.0.post8.tar.gz',
+            '1.0.0.8/octoprint_prusaxltoolfix-1.0.0.8.tar.gz',
         )
 
     def test_profile_list(self):
