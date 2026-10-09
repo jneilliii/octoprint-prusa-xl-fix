@@ -17,18 +17,7 @@ archive: archive link to install your plugin via pip, e.g. from github: https://
     
 tags:
 - prusa
-    
-screenshots:
-- url: url of a screenshot, /assets/img/...
-  alt: alt-text of a screenshot
-  caption: caption of a screenshot
-- url: url of another screenshot, /assets/img/...
-  alt: alt-text of another screenshot
-  caption: caption of another screenshot
-- ...
-    
-featuredimage: url of a featured image for your plugin, /assets/img/...
-    
+        
     
 compatibility:    
   octoprint:
